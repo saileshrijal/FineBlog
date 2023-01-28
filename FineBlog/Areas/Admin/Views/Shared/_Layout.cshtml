@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@model FineBlog.Models.ApplicationUser
+@inject UserManager<ApplicationUser> _userManager;
+@{
+    var loggedInUser = new ApplicationUser();
+    loggedInUser = _userManager.Users?.FirstOrDefault(x => x.UserName == User.Identity!.Name);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -113,16 +121,20 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    @loggedInUser?.FirstName @loggedInUser?.LastName
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
+                                <form asp-action="Logout" asp-controller="User" asp-area="Admin" method="post">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </button>
+                                </form>
                             </div>
                         </li>
 
@@ -150,7 +162,7 @@
         <!-- End of Content Wrapper -->
 
     </div>
-    @await Component.InvokeAsync("Notyf")
+    
     <!-- End of Page Wrapper -->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -174,7 +186,7 @@
     <script src="~/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="~/dashboard/js/demo/chart-pie-demo.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
+    @await Component.InvokeAsync("Notyf")
 </body>
 
 </html>
