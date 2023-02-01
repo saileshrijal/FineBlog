@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity;
-@model FineBlog.Models.ApplicationUser
 @inject UserManager<ApplicationUser> _userManager;
 @{
     var loggedInUser = new ApplicationUser();
@@ -26,6 +25,7 @@
 
     <!-- Custom styles for this template-->
     <link href="~/dashboard/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" rel="stylesheet">
 
 </head>
 
@@ -185,6 +185,12 @@
     <!-- Page level custom scripts -->
     <script src="~/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="~/dashboard/js/demo/chart-pie-demo.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("Notyf")
 </body>
