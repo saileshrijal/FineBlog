@@ -35,11 +35,59 @@ namespace FineBlog.Areas.Admin.Controllers
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                UserName = x.UserName
+                UserName = x.UserName,
+                Email = x.Email,
             }).ToList();
+            //assinging role
+            foreach(var user in vm)
+            {
+                var singleUser = await _userManager.FindByIdAsync(user.Id);
+                var role = await _userManager.GetRolesAsync(singleUser);
+                user.Role = role.FirstOrDefault();
+            }
 
             return View(vm);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string id)
+        {
+            var existingUser = await _userManager.FindByIdAsync(id);
+            if (existingUser == null)
+            {
+                _notification.Error("User doesnot exsits");
+                return View();
+            }
+            var vm = new ResetPasswordVM()
+            {
+                Id = existingUser.Id,
+                UserName = existingUser.UserName
+            };
+            return View(vm);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM vm)
+        {
+            if (!ModelState.IsValid){ return View(vm); }
+            var existingUser = await _userManager.FindByIdAsync(vm.Id);
+            if (existingUser == null)
+            {
+                _notification.Error("User doesnot exist");
+                return View(vm);
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(existingUser);
+            var result = await _userManager.ResetPasswordAsync(existingUser, token, vm.NewPassword);
+            if (result.Succeeded)
+            {
+                _notification.Success("Password reset succuful");
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
+        }
+
 
         [Authorize(Roles ="Admin")]
         [HttpGet]
