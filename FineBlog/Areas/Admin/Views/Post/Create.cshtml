@@ -1,0 +1,52 @@
+﻿@model FineBlog.ViewModels.CreatePostVM
+
+@{
+    ViewData["Title"] = "Create Post";
+}
+
+<div class="container-fluid">
+    <a class="btn btn-primary mb-1" asp-action="Index" asp-controller="Post">Go Back</a>
+    <div class="card">
+        <div class="card-header bg-primary">
+            <h4 class="card-title text-white">New Post</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Register" asp-controller="User" asp-area="Admin">
+
+                <div class="row mb-2">
+                    <div class="col-9">
+                    <div class="mb-2">
+                        <label>Title</label>
+                        <input type="text" asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label>Short Description</label>
+                        <input type="text" asp-for="ShortDescription" class="form-control" />
+                        <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="mb-2">
+                        <img src="~/thumbnails/default_image.png" class="img-fluid" />
+                    </div>
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <input type="file" asp-for="Thumbnail" class="custom-file" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="mb-2">
+                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
