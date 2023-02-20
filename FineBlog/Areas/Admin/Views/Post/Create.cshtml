@@ -33,11 +33,11 @@
                 </div>
                 <div class="col-3">
                     <div class="mb-2">
-                        <img src="~/thumbnails/default_image.png" class="img-fluid" />
+                            <img src="~/thumbnails/default_image.png" class="img-fluid" id="thumbnail" />
                     </div>
                     <div class="mb-2">
-                        <label>Description</label>
-                        <input type="file" asp-for="Thumbnail" class="custom-file" />
+                        <label>Thumbnail</label>
+                        <input type="file" asp-for="Thumbnail" class="custom-file"/>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                 </div>
@@ -50,3 +50,13 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(".custom-file").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            document.getElementById('thumbnail').src = window.URL.createObjectURL(this.files[0])
+        });
+    </script>
+}
