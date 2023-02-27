@@ -19,8 +19,8 @@ namespace FineBlog.Areas.Admin.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public PostController(ApplicationDbContext context, 
-                                INotyfService notyfService, 
+        public PostController(ApplicationDbContext context,
+                                INotyfService notyfService,
                                 IWebHostEnvironment webHostEnvironment,
                                 UserManager<ApplicationUser> userManager)
         {
@@ -39,11 +39,11 @@ namespace FineBlog.Areas.Admin.Controllers
             var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser!);
             if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin)
             {
-                listOfPosts = await _context.Posts!.Include(x=>x.ApplicationUser).ToListAsync();
+                listOfPosts = await _context.Posts!.Include(x => x.ApplicationUser).ToListAsync();
             }
             else
             {
-                listOfPosts = await _context.Posts!.Include(x => x.ApplicationUser).Where(x=>x.ApplicationUser!.Id==loggedInUser!.Id).ToListAsync();
+                listOfPosts = await _context.Posts!.Include(x => x.ApplicationUser).Where(x => x.ApplicationUser!.Id == loggedInUser!.Id).ToListAsync();
             }
 
             var listOfPostsVM = listOfPosts.Select(x => new PostVM()
@@ -66,7 +66,7 @@ namespace FineBlog.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreatePostVM vm)
         {
-            if(!ModelState.IsValid) { return View(vm); }
+            if (!ModelState.IsValid) { return View(vm); }
 
             //get logged in user id
             var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity!.Name);
@@ -78,7 +78,7 @@ namespace FineBlog.Areas.Admin.Controllers
             post.ShortDescription = vm.ShortDescription;
             post.ApplicationUserId = loggedInUser!.Id;
 
-            if(post.Title!= null)
+            if (post.Title != null)
             {
                 string slug = vm.Title!.Trim();
                 slug = slug.Replace(" ", "-");
@@ -94,6 +94,24 @@ namespace FineBlog.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
             _notification.Success("Post Created Successfully");
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var post = await _context.Posts!.FirstOrDefaultAsync(x => x.Id == id);
+
+            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity!.Name);
+            var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser!);
+
+            if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin || loggedInUser?.Id == post?.ApplicationUserId)
+            {
+                _context.Posts!.Remove(post!);
+                await _context.SaveChangesAsync();
+                _notification.Success("Post Deleted Successfully");
+                return RedirectToAction("Index", "Post", new { area = "Admin" });
+            }
+            return View();
         }
 
 
