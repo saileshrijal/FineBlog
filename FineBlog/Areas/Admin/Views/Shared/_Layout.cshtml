@@ -190,9 +190,16 @@
     <script src="~/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="~/dashboard/js/demo/chart-pie-demo.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/7qjkjvz7eegr5schf3b8iwvemcxjb82zvn5nvbm02u8l4xkb/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         $(document).ready(function () {
             $('#myTable').DataTable();
+        });
+
+        tinymce.init({
+            selector: '#richEditor',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
