@@ -1,23 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FineBlog.Data;
+using FineBlog.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FineBlog.Controllers
 {
     public class PageController : Controller
     {
+        private readonly ApplicationDbContext _context;
 
-        public IActionResult About()
+        public PageController(ApplicationDbContext context)
         {
-            return View();
+            _context = context;
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> About()
         {
-            return View();
+            var page = await _context.Pages!.FirstOrDefaultAsync(x => x.Slug == "about");
+            var vm = new PageVM()
+            {
+                Title = page!.Title,
+                ShortDescription = page.ShortDescription,
+                Description = page.Description,
+                ThumbnailUrl = page.ThumbnailUrl,
+            };
+            return View(vm);
         }
 
-        public IActionResult PrivacyPolicy()
+        public async Task<IActionResult> Contact()
         {
-            return View();
+            var page = await _context.Pages!.FirstOrDefaultAsync(x => x.Slug == "contact");
+            var vm = new PageVM()
+            {
+                Title = page!.Title,
+                ShortDescription = page.ShortDescription,
+                Description = page.Description,
+                ThumbnailUrl = page.ThumbnailUrl,
+            };
+            return View(vm);
+        }
+
+        public async Task<IActionResult> PrivacyPolicy()
+        {
+            var page = await _context.Pages!.FirstOrDefaultAsync(x => x.Slug == "privacy");
+            var vm = new PageVM()
+            {
+                Title = page!.Title,
+                ShortDescription = page.ShortDescription,
+                Description = page.Description,
+                ThumbnailUrl = page.ThumbnailUrl,
+            };
+            return View(vm);
         }
     }
 }
