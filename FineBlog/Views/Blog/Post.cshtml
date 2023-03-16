@@ -1,0 +1,42 @@
+﻿@model FineBlog.ViewModels.BlogPostVM
+
+@{
+    ViewData["Title"] = "Post";
+    string thumbnailUrl = "";
+    if(Model.ThumbnailUrl == null)
+    {
+        thumbnailUrl = "/blog/assets/img/home-bg.jpg";
+    }
+    else
+    {
+        thumbnailUrl = "/thumbnails/" + Model.ThumbnailUrl;
+    }
+}
+
+<header class="masthead" style="background-image: url('@thumbnailUrl')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="post-heading">
+                    <h1>@Model.Title</h1>
+                    <h2 class="subheading">@Model.ShortDescription</h2>
+                    <span class="meta">
+                        Posted by
+                        <a href="#!">@Model.AuthorName</a>
+                        on @Model.CreatedDate.ToShortDateString()
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Post Content-->
+<article class="mb-4">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                @Html.Raw(Model.Description)
+            </div>
+        </div>
+    </div>
+</article>
