@@ -29,7 +29,7 @@ namespace FineBlog.Controllers
             vm.ThumbnailUrl = setting[0].ThumbnailUrl;
             int pageSize = 4;
             int pageNumber = (page ?? 1);
-            vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).ToPagedListAsync(pageNumber, pageSize);
+            vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).OrderByDescending(x=>x.CreatedDate).ToPagedListAsync(pageNumber, pageSize);
             return View(vm);
         }
 

@@ -17,7 +17,7 @@ namespace FineBlog.Controllers
             _notification = notification;
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/{slug}")]
         public IActionResult Post(string slug)
         {
             if (slug == "")

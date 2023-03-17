@@ -81,6 +81,7 @@
 </div>
 
 @section Scripts{
+    <partial name="_ValidationScriptsPartial" />
     <script>
         $(".custom-file").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
