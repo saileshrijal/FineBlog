@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace FineBlog.Areas.Admin.Controllers
 {
@@ -31,7 +32,7 @@ namespace FineBlog.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
             var listOfPosts = new List<Post>();
 
@@ -54,7 +55,11 @@ namespace FineBlog.Areas.Admin.Controllers
                 ThumbnailUrl = x.ThumbnailUrl,
                 AuthorName = x.ApplicationUser!.FirstName + " " + x.ApplicationUser.LastName
             }).ToList();
-            return View(listOfPostsVM);
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            return View(await listOfPostsVM.ToPagedListAsync(pageNumber, pageSize));
         }
 
         [HttpGet]

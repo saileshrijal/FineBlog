@@ -1,4 +1,7 @@
 ﻿@model FineBlog.ViewModels.HomeVM
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 
 @{
     ViewData["Title"] = "Home Page";
@@ -48,10 +51,18 @@
                 <!-- Divider-->
                 <hr class="my-4" />
             }
-           
-            
-            <!-- Pager-->
-            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+
+            Page @(Model?.Posts.PageCount < Model?.Posts.PageNumber ? 0 : Model?.Posts.PageNumber) of @Model?.Posts.PageCount
+            @Html.PagedListPager(Model?.Posts,page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }),
+            new PagedListRenderOptions()
+            {
+            ContainerDivClasses = new List<string> {"d-flex justify-content-start mb-4"},
+            UlElementClasses = new List<string> {"pagination"},
+            LiElementClasses = new List<string> {"btn btn-primary mx-1 text-uppercase"},
+            ActiveLiElementClass =  "active",
+            })
         </div>
     </div>
 </div>
+

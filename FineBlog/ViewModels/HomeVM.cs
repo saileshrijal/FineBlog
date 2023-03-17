@@ -1,4 +1,5 @@
 ﻿using FineBlog.Models;
+using X.PagedList;
 
 namespace FineBlog.ViewModels
 {
@@ -7,6 +8,6 @@ namespace FineBlog.ViewModels
         public string? Title { get; set; }
         public string? ShortDescription { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public List<Post>? Posts { get; set; }
+        public IPagedList<Post>? Posts { get; set; }
     }
 }
